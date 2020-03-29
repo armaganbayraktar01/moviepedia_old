@@ -33,7 +33,7 @@ const store = createStore(
         applyMiddleware(promise, thunk, logger)
     )
 );
-
+ 
 ReactDOM.render( 
     <BrowserRouter>
         <Provider store = { store }>

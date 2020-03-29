@@ -1,0 +1,1 @@
+export default API_BASE = "https://movieapp-ab-backend.herokuapp.com/api";
