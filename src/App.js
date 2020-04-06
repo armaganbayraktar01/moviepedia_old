@@ -17,8 +17,10 @@ class App extends Component
     return (
       <div className="App">
         <Header/>
-        <Container>
+        <Container text style={{ marginTop: '7em' }}>
           <Route exact path={siteMenus.homepage.path} component={siteMenus.homepage.component}></Route>
+          <Route exact path={siteMenus.moviespage.path} component={siteMenus.moviespage.component}></Route>
+          <Route exact path={siteMenus.addmoviepage.path} component={siteMenus.addmoviepage.component}></Route>
         </Container>
         <Footer/>        
         

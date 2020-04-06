@@ -1,11 +1,12 @@
 // moviesReducer
 
-import { FETCH_MOVIE_PENDING, FETCH_MOVIE_FULFILLED, FETCH_MOVIE_REJECTED } from '../actions/moviesReducerAction';
+import { ADD_MOVIE_PENDING, ADD_MOVIE_FULFILLED, ADD_MOVIE_REJECTED } from '../actions/addMovieReducerAction';
 
 
 const initialState = {
     fetching: false,
-    moviesReducerList: [],
+    done: false,
+    addMovieReducerList: [],
     error: {}
 }
 
@@ -13,20 +14,21 @@ export default (state = initialState, action) =>
 {
     switch (action.type)
     {
-        case FETCH_MOVIE_PENDING:
+        case ADD_MOVIE_PENDING:
             return {
                 ...state,
                 fetching: true
             };
 
-        case FETCH_MOVIE_FULFILLED:
+        case ADD_MOVIE_FULFILLED:
             return {
                 ...state,
-                moviesReducerList: action.payload,
-                fetching: false
+                addMovieReducerList: action.payload,
+                fetching: false,
+                done: true
             };
 
-        case FETCH_MOVIE_REJECTED:
+        case ADD_MOVIE_REJECTED:
             return {
                 ...state,
                 error: action.payload,

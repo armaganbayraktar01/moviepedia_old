@@ -2,44 +2,45 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { fetchMovies } from '../../actions/moviesReducerAction';
+
+import MoviesList from './lists/moviesList';
+
 
 class moviesPage extends Component
 {
 
-    constructor(){
-        super();
-            
-    }
-
-
     static propTypes = {
-        
+        moviesReducer: PropTypes.object.isRequired        
     };
 
-
-    state = {
-        
-    };
-
+    // fetchmovies fonksiyonunu çalıştırdık
+    componentDidMount() {
+        this.props.fetchMovies();
+    }
 
     render() {
         return (
             <div>
-                MOVIES LİST                    
+                <MoviesList 
+                    moviesReducerProps={ this.props.moviesReducer }
+                />                                
             </div>
         );
     }
 }
 
 
-moviesPage.propTypes = {
-    
-};
 
-const mapStateToProps = state => {
+// Reducer ı dahil ettim. 
+const mapStateToProps = ({ moviesReducer }) => {
     return {
-            
+        moviesReducer           
     }
 };
 
-export default connect(mapStateToProps)(moviesPage);
+const mapDispatchToProps = {
+    fetchMovies
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(moviesPage);

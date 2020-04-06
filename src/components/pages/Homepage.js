@@ -19,8 +19,7 @@ class Homepage extends Component
     render() {
         return (
             <div>
-                <div style={{height:'700px'}}>
-                </div>                    
+                  
             </div>
         );
     }
