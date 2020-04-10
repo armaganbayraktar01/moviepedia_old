@@ -6,7 +6,7 @@ import { Grid } from 'semantic-ui-react';
 import { ClockLoader } from 'react-spinners';
 
 
-const moviesList  = ({ moviesReducerProps }) => {
+const moviesList  = ({ moviesReducerProps, onDeleteMovieSubmitProps }) => {
 
     const emptyMovieListMessage = 
     (
@@ -36,8 +36,9 @@ const moviesList  = ({ moviesReducerProps }) => {
             moviesReducerProps.moviesReducerList.map(
                 movieListData => 
                 <MovieCard
-                    key={ movieListData._id }
-                    movieListDataProps = { movieListData } 
+                    key = { movieListData._id }
+                    movieListDataProps = { movieListData }
+                    deleteMovieProps = { onDeleteMovieSubmitProps }
                 />
             )
         }
@@ -60,12 +61,13 @@ const moviesList  = ({ moviesReducerProps }) => {
    
         </div>
     )
-
+console.log(moviesReducerProps)
     return (
+        
 
         <div>
             {
-                moviesReducerProps.length === 0 ? emptyMovieListMessage : (
+                moviesReducerProps.moviesReducerList.length === 0 ? emptyMovieListMessage : (
                     moviesReducerProps.fetching ? loader : movieListContent
                 )                
             }    

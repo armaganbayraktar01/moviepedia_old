@@ -3,6 +3,7 @@ import homePage from '../components/pages/homePage';
 import moviesPage from '../components/pages/moviesPage';
 import addMoviePage from '../components/pages/addMoviePage';
 
+
 export const siteMeta = {
     title: 'Moviepedia',
     logo: siteLogo,
@@ -26,6 +27,11 @@ export const siteMenus = {
     addmoviepage: {
         title: 'Add Movie',
         path: '/movies/addmovie',
+        component: addMoviePage
+    },
+    editmoviepage: {
+        title: 'Edit Movie',
+        path: '/movie/:_id',
         component: addMoviePage
     }
 }

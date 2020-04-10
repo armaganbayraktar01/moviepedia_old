@@ -13,8 +13,7 @@ import rootReducer from './reducers/rootReducer';
 import thunk from 'redux-thunk';
  
 // Redux Logger İşlemleri
-import logger from 'redux-logger';
-
+import logger from 'redux-logger'
 // redux-promise-middleware İşlemleri
 import promise from 'redux-promise-middleware'
 

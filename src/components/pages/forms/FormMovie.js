@@ -2,13 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Grid, Form, Image, Input, Select, Button, TextArea } from 'semantic-ui-react';
+import { Grid, Form, Image, Input, Button, TextArea } from 'semantic-ui-react';
 import ErrorMessageLabel from '../../items/semantic/ErrorMessageLabel';
-
-const options = [
-    { key: 1, text: 'Drama', value: 1 },
-    { key: 2, text: 'Crime', value: 2 },
-]
 
 class FormMovie extends Component
 {
@@ -17,13 +12,28 @@ class FormMovie extends Component
         addMovieReducerProps: PropTypes.object.isRequired
     };
 
+    UNSAFE_componentWillReceiveProps( nextProps )
+    {
+        const { selectMovie } = nextProps.addMovieReducerProps;
+        if ( selectMovie.title && selectMovie.title !== this.state.title )
+        {
+            this.setState({
+                title: selectMovie.title,
+                cover: selectMovie.cover,
+                imbd: selectMovie.imbd,
+                desc: selectMovie.desc
+                //genres: selectMovie.genres
+            })
+        }
+    }
+   
+
     state = {
-        _id: this.props.movieFilterUriProps ? this.props.movieFilterUriProps._id : '',
-        title: this.props.movieFilterUriProps ? this.props.movieFilterUriProps.title : '',
-        cover: this.props.movieFilterUriProps ? this.props.movieFilterUriProps.cover : '',
-        imbd: this.props.movieFilterUriProps ? this.props.movieFilterUriProps.imbd : '',
-        desc: this.props.movieFilterUriProps ? this.props.movieFilterUriProps.desc : '',
-        //genres: this.props.movieFilterUriProps ? this.props.movieFilterUriProps.genres : '',
+        _id: this.props.findEditMovieProps ? this.props.findEditMovieProps._id : "",
+        title: this.props.findEditMovieProps ? this.props.findEditMovieProps.title : "",
+        cover: this.props.findEditMovieProps ? this.props.findEditMovieProps.cover : "",
+        imbd: this.props.findEditMovieProps ? this.props.findEditMovieProps.imbd : "",
+        desc: this.props.findEditMovieProps ? this.props.findEditMovieProps.desc : "",
         formErrors: {},
         redirect: false
     };
@@ -36,13 +46,21 @@ class FormMovie extends Component
 
         this.setState({
             formErrors,
-            //redirect: true
+            redirect: true
         });
+
+        const _id = this.state._id || this.props.addMovieReducerProps.selectMovie._id;
 
         if (Object.keys(formErrors).length === 0 )
         {
-            this.props.onAddMovieSubmitProps( this.state );
+            if ( !_id )
+
+                this.props.onAddMovieSubmitProps( this.state );
+            else
+                this.props.onUpdateMovieSubmitProps( { ...this.state, _id })
+
         }
+        
     };
 
     formHandleChange = (e) => 
@@ -65,8 +83,7 @@ class FormMovie extends Component
     };
 
 
-    render() {
-  
+    render() { 
        
         const formErrors = this.state.formErrors;
         const emptyPicture = "https://m.media-amazon.com/images/G/01/imdb/images/nopicture/medium/film-3385785534._CB468454186_.png";
@@ -100,7 +117,7 @@ class FormMovie extends Component
 
                     <Form 
                         onSubmit= { this.formOnSubmit }
-                        loading = { this.props.addMovieReducerProps.fetching }
+                        loading = { this.props.addMovieReducerProps.fetching || this.props.addMovieReducerProps.selectMovie.fetching }
                     >
 
                         <Form.Field
@@ -123,29 +140,18 @@ class FormMovie extends Component
                             onChange = { this.formHandleChange }
                             error = { formErrors.cover && formErrors.cover }
                         />
-                        <Form.Group widths="equal">
-                            <Form.Field
-                                control = { Input }
-                                id = "imbd"
-                                name ="imbd"
-                                label = "Movie Imbd"
-                                value = { this.state.imbd }
-                                placeholder = "Movie IMBD..."
-                                onChange = { this.formHandleChange }
-                                error = { formErrors.imbd && formErrors.imbd }                          
-                            />
-                            <Form.Field
-                                fluid
-                                control = { Select }
-                                id = "genres"
-                                name ="genres"
-                                label = "Movie Genre"
-                                options = { options }
-                                placeholder = "Movie Genres..."
-                                onChange = { this.formHandleChange }
-                                error = { formErrors.genres && formErrors.genres }
-                            />
-                        </Form.Group>
+
+                        <Form.Field
+                            control = { Input }
+                            id = "imbd"
+                            name ="imbd"
+                            label = "Movie Imbd"
+                            value = { this.state.imbd }
+                            placeholder = "Movie IMBD..."
+                            onChange = { this.formHandleChange }
+                            error = { formErrors.imbd && formErrors.imbd }                          
+                        />
+
                         <Form.Field
                             control = { TextArea }
                             id = "desc"
@@ -161,7 +167,12 @@ class FormMovie extends Component
                             fluid primary
                             control = { Button }
                             type = "submit"
-                            content = "Add Movie"                  
+                            content = { 
+                                this.props.addMovieReducerProps.selectMovie.editButtonActive === true
+                                 ? "Edit Movie" : "Add Movie" 
+                            } 
+           
+                               
                         />
 
                     </Form>
@@ -175,7 +186,7 @@ class FormMovie extends Component
                 {
                     errorMessage ? errorMessage : 
                     (
-                        this.props.addMovieReducerProps.done ? 
+                        this.props.addMovieReducerProps.done && this.state.redirect ?
                         <Redirect to="/movies" /> 
                         : form
                     )
